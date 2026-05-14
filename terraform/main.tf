@@ -8,7 +8,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "uptime-monitor-tfstate"
+    bucket = "uptime-monitor-tfstate-155684258133"
     key    = "terraform.tfstate"
     region = "ap-northeast-2"
   }
