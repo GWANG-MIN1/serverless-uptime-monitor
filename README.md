@@ -1,7 +1,5 @@
 # serverless-uptime-monitor
 
-Serverless uptime monitoring — health checks, alerts & incident history on AWS
-
 EC2 없이 순수 서버리스 아키텍처로 구현한 업타임 모니터링 서비스입니다.  
 엔드포인트를 등록하면 EventBridge가 1분마다 헬스체크를 실행하고, 장애 감지 시 SQS → Lambda → Slack/Email 알림을 자동으로 발송합니다.
 
