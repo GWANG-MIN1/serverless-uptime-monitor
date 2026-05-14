@@ -7,50 +7,6 @@ EC2 없이 순수 서버리스 아키텍처로 구현한 업타임 모니터링 
 
 ![Architecture](docs/architecture.svg)
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                      API Gateway (HTTP)                  │
-│  POST /endpoints  GET /endpoints  DELETE /endpoints/{id} │
-│  GET /endpoints/{id}  GET /endpoints/{id}/history        │
-└─────────────────────┬───────────────────────────────────┘
-                      │
-              ┌───────▼────────┐
-              │ Lambda         │
-              │ (register)     │
-              └───────┬────────┘
-                      │
-              ┌───────▼────────┐
-              │   DynamoDB     │
-              │  endpoints     │
-              │  check-history │
-              └────────────────┘
-
-EventBridge (rate 1 min)
-      │
-      ▼
-┌─────────────┐     장애 감지     ┌──────────────┐
-│   Lambda    │ ──────────────▶  │     SQS      │
-│(health_check)│                  │ (alert-queue)│
-└─────────────┘                  └──────┬───────┘
-                                        │
-                                 ┌──────▼───────┐
-                                 │    Lambda    │
-                                 │   (alert)    │
-                                 └──────┬───────┘
-                                        │
-                           ┌────────────┼────────────┐
-                           ▼            ▼
-                      Slack Webhook   SNS → Email
-
-EventBridge (cron 매월 1일)
-      │
-      ▼
-┌─────────────┐
-│   Lambda    │ ──▶ S3 (월별 리포트 저장)
-│  (report)   │
-└─────────────┘
-```
-
 ## Tech Stack
 
 | 분류 | 기술 |

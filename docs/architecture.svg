@@ -1,141 +1,133 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 990" font-family="'Segoe UI', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 980" font-family="'Segoe UI', Arial, sans-serif">
   <defs>
     <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+      <path d="M0,0 L0,6 L8,3 z" fill="#6b7280"/>
     </marker>
     <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
       <path d="M0,0 L0,6 L8,3 z" fill="#ef4444"/>
     </marker>
-    <marker id="ad" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
-    </marker>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
   </defs>
 
-  <!-- ░░ Canvas background ░░ -->
-  <rect width="740" height="990" fill="#0d1117" rx="14"/>
+  <!-- Background -->
+  <rect width="700" height="980" fill="#0d1117" rx="14"/>
 
-  <!-- ═══════════════════════════════════════
-       SECTION 1 — API FLOW
-  ═══════════════════════════════════════ -->
-  <rect x="20" y="14" width="700" height="268" rx="10" fill="#161b22" stroke="#21262d" stroke-width="1.2"/>
-  <!-- badge -->
-  <rect x="36" y="26" width="90" height="22" rx="11" fill="#1d4ed8"/>
-  <text x="81" y="41" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">① API FLOW</text>
+  <!-- Single outer block -->
+  <rect x="18" y="18" width="664" height="944" rx="12" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="350" y="52" text-anchor="middle" font-size="17" font-weight="700" fill="#e6edf3">Serverless Uptime Monitor</text>
+  <text x="350" y="72" text-anchor="middle" font-size="11" fill="#6b7280">AWS Lambda · EventBridge · SQS · DynamoDB · SNS · S3</text>
+
+  <!-- Divider -->
+  <line x1="48" y1="84" x2="652" y2="84" stroke="#21262d" stroke-width="1"/>
+
+  <!-- ─── Section label: API FLOW ─── -->
+  <text x="350" y="106" text-anchor="middle" font-size="10" font-weight="700" fill="#4b5563" letter-spacing="2">① API FLOW</text>
 
   <!-- API Gateway -->
-  <rect x="250" y="56" width="240" height="58" rx="9" fill="#0f1f3d" stroke="#3b82f6" stroke-width="1.8"/>
-  <text x="370" y="78" text-anchor="middle" font-size="10" fill="#93c5fd">Amazon API Gateway</text>
-  <text x="370" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#bfdbfe">HTTP API</text>
-  <text x="370" y="110" text-anchor="middle" font-size="9" fill="#60a5fa">POST · GET · DELETE /endpoints</text>
+  <rect x="225" y="116" width="250" height="58" rx="9" fill="#0f1f3d" stroke="#3b82f6" stroke-width="1.8"/>
+  <text x="350" y="137" text-anchor="middle" font-size="10" fill="#93c5fd">Amazon API Gateway</text>
+  <text x="350" y="155" text-anchor="middle" font-size="13" font-weight="700" fill="#bfdbfe">HTTP API</text>
+  <text x="350" y="169" text-anchor="middle" font-size="9" fill="#60a5fa">POST · GET · DELETE /endpoints</text>
 
-  <!-- arrow -->
-  <line x1="370" y1="114" x2="370" y2="138" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="350" y1="174" x2="350" y2="198" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Lambda register -->
-  <rect x="270" y="140" width="200" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
-  <text x="370" y="160" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
-  <text x="370" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">register</text>
-  <text x="370" y="192" text-anchor="middle" font-size="9" fill="#4ade80">Python 3.12</text>
+  <rect x="245" y="200" width="210" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
+  <text x="350" y="220" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
+  <text x="350" y="238" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">register</text>
+  <text x="350" y="252" text-anchor="middle" font-size="9" fill="#4ade80">Python 3.12</text>
 
-  <!-- arrow -->
-  <line x1="370" y1="194" x2="370" y2="218" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="350" y1="254" x2="350" y2="278" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- DynamoDB -->
-  <rect x="260" y="220" width="220" height="54" rx="9" fill="#1e1040" stroke="#8b5cf6" stroke-width="1.8"/>
-  <text x="370" y="240" text-anchor="middle" font-size="10" fill="#c4b5fd">Amazon DynamoDB</text>
-  <text x="370" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#ddd6fe">endpoints / check-history</text>
-  <text x="370" y="272" text-anchor="middle" font-size="9" fill="#a78bfa">PAY_PER_REQUEST · TTL 30d</text>
+  <rect x="230" y="280" width="240" height="54" rx="9" fill="#1e1040" stroke="#8b5cf6" stroke-width="1.8"/>
+  <text x="350" y="300" text-anchor="middle" font-size="10" fill="#c4b5fd">Amazon DynamoDB</text>
+  <text x="350" y="318" text-anchor="middle" font-size="13" font-weight="700" fill="#ddd6fe">endpoints / check-history</text>
+  <text x="350" y="332" text-anchor="middle" font-size="9" fill="#a78bfa">PAY_PER_REQUEST · TTL 30d</text>
 
-  <!-- ═══════════════════════════════════════
-       SECTION 2 — HEALTH CHECK FLOW
-  ═══════════════════════════════════════ -->
-  <rect x="20" y="298" width="700" height="408" rx="10" fill="#161b22" stroke="#21262d" stroke-width="1.2"/>
-  <rect x="36" y="310" width="162" height="22" rx="11" fill="#0e7490"/>
-  <text x="117" y="325" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">② HEALTH CHECK FLOW</text>
+  <!-- Section divider -->
+  <line x1="48" y1="354" x2="652" y2="354" stroke="#21262d" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ─── Section label: HEALTH CHECK FLOW ─── -->
+  <text x="350" y="374" text-anchor="middle" font-size="10" font-weight="700" fill="#4b5563" letter-spacing="2">② HEALTH CHECK FLOW</text>
 
   <!-- EventBridge -->
-  <rect x="270" y="342" width="200" height="54" rx="9" fill="#0f1f3d" stroke="#3b82f6" stroke-width="1.8"/>
-  <text x="370" y="362" text-anchor="middle" font-size="10" fill="#93c5fd">Amazon EventBridge</text>
-  <text x="370" y="380" text-anchor="middle" font-size="13" font-weight="700" fill="#bfdbfe">rate(1 minute)</text>
-  <text x="370" y="394" text-anchor="middle" font-size="9" fill="#60a5fa">Scheduler</text>
+  <rect x="245" y="384" width="210" height="54" rx="9" fill="#0f1f3d" stroke="#3b82f6" stroke-width="1.8"/>
+  <text x="350" y="404" text-anchor="middle" font-size="10" fill="#93c5fd">Amazon EventBridge</text>
+  <text x="350" y="422" text-anchor="middle" font-size="13" font-weight="700" fill="#bfdbfe">rate(1 minute)</text>
+  <text x="350" y="436" text-anchor="middle" font-size="9" fill="#60a5fa">Scheduler</text>
 
-  <!-- arrow -->
-  <line x1="370" y1="396" x2="370" y2="420" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="350" y1="438" x2="350" y2="462" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Lambda health_check -->
-  <rect x="270" y="422" width="200" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
-  <text x="370" y="442" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
-  <text x="370" y="460" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">health_check</text>
-  <text x="370" y="474" text-anchor="middle" font-size="9" fill="#4ade80">HTTP GET · timeout 10s</text>
+  <rect x="245" y="464" width="210" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
+  <text x="350" y="484" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
+  <text x="350" y="502" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">health_check</text>
+  <text x="350" y="516" text-anchor="middle" font-size="9" fill="#4ade80">HTTP GET · timeout 10s</text>
 
-  <!-- "장애 감지" label on red arrow -->
-  <line x1="370" y1="476" x2="370" y2="500" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#ar)"/>
-  <rect x="382" y="482" width="74" height="16" rx="4" fill="#1a0505"/>
-  <text x="419" y="494" font-size="9" font-weight="700" fill="#ef4444">장애 감지 시</text>
+  <!-- red dashed arrow with label -->
+  <line x1="350" y1="518" x2="350" y2="542" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#ar)"/>
+  <rect x="362" y="524" width="72" height="15" rx="4" fill="#1a0505"/>
+  <text x="398" y="535" font-size="9" font-weight="700" fill="#ef4444">장애 감지 시</text>
 
   <!-- SQS -->
-  <rect x="270" y="502" width="200" height="54" rx="9" fill="#2d0f0f" stroke="#ef4444" stroke-width="1.8"/>
-  <text x="370" y="522" text-anchor="middle" font-size="10" fill="#fca5a5">Amazon SQS</text>
-  <text x="370" y="540" text-anchor="middle" font-size="13" font-weight="700" fill="#fecaca">alert-queue</text>
-  <text x="370" y="554" text-anchor="middle" font-size="9" fill="#f87171">+ Dead Letter Queue</text>
+  <rect x="245" y="544" width="210" height="54" rx="9" fill="#2d0f0f" stroke="#ef4444" stroke-width="1.8"/>
+  <text x="350" y="564" text-anchor="middle" font-size="10" fill="#fca5a5">Amazon SQS</text>
+  <text x="350" y="582" text-anchor="middle" font-size="13" font-weight="700" fill="#fecaca">alert-queue</text>
+  <text x="350" y="596" text-anchor="middle" font-size="9" fill="#f87171">+ Dead Letter Queue</text>
 
-  <!-- arrow -->
-  <line x1="370" y1="556" x2="370" y2="580" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="350" y1="598" x2="350" y2="622" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Lambda alert -->
-  <rect x="270" y="582" width="200" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
-  <text x="370" y="602" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
-  <text x="370" y="620" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">alert</text>
-  <text x="370" y="634" text-anchor="middle" font-size="9" fill="#4ade80">Python 3.12</text>
+  <rect x="245" y="624" width="210" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
+  <text x="350" y="644" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
+  <text x="350" y="662" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">alert</text>
+  <text x="350" y="676" text-anchor="middle" font-size="9" fill="#4ade80">Python 3.12</text>
 
-  <!-- split arrows from alert -->
-  <line x1="370" y1="636" x2="370" y2="648" stroke="#4b5563" stroke-width="1.5"/>
-  <line x1="370" y1="648" x2="210" y2="648" stroke="#4b5563" stroke-width="1.5"/>
-  <line x1="370" y1="648" x2="530" y2="648" stroke="#4b5563" stroke-width="1.5"/>
-  <line x1="210" y1="648" x2="210" y2="668" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
-  <line x1="530" y1="648" x2="530" y2="668" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
+  <!-- split to Slack + SNS -->
+  <line x1="350" y1="678" x2="350" y2="694" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="190" y1="694" x2="510" y2="694" stroke="#6b7280" stroke-width="1.5"/>
+  <line x1="190" y1="694" x2="190" y2="714" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="510" y1="694" x2="510" y2="714" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Slack -->
-  <rect x="110" y="670" width="200" height="52" rx="9" fill="#0d1f38" stroke="#60a5fa" stroke-width="1.8"/>
-  <text x="210" y="692" text-anchor="middle" font-size="10" fill="#93c5fd">Slack</text>
-  <text x="210" y="710" text-anchor="middle" font-size="13" font-weight="700" fill="#bfdbfe">Webhook Alert</text>
+  <rect x="96" y="716" width="188" height="52" rx="9" fill="#0d1f38" stroke="#60a5fa" stroke-width="1.8"/>
+  <text x="190" y="738" text-anchor="middle" font-size="10" fill="#93c5fd">Slack</text>
+  <text x="190" y="756" text-anchor="middle" font-size="13" font-weight="700" fill="#bfdbfe">Webhook Alert</text>
 
   <!-- SNS Email -->
-  <rect x="430" y="670" width="200" height="52" rx="9" fill="#2d1a0f" stroke="#f97316" stroke-width="1.8"/>
-  <text x="530" y="692" text-anchor="middle" font-size="10" fill="#fdba74">Amazon SNS</text>
-  <text x="530" y="710" text-anchor="middle" font-size="13" font-weight="700" fill="#fed7aa">Email Alert</text>
+  <rect x="416" y="716" width="188" height="52" rx="9" fill="#2d1a0f" stroke="#f97316" stroke-width="1.8"/>
+  <text x="510" y="738" text-anchor="middle" font-size="10" fill="#fdba74">Amazon SNS</text>
+  <text x="510" y="756" text-anchor="middle" font-size="13" font-weight="700" fill="#fed7aa">Email Alert</text>
 
-  <!-- ═══════════════════════════════════════
-       SECTION 3 — REPORT FLOW
-  ═══════════════════════════════════════ -->
-  <rect x="20" y="722" width="700" height="228" rx="10" fill="#161b22" stroke="#21262d" stroke-width="1.2"/>
-  <rect x="36" y="734" width="126" height="22" rx="11" fill="#065f46"/>
-  <text x="99" y="749" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">③ REPORT FLOW</text>
+  <!-- Section divider -->
+  <line x1="48" y1="786" x2="652" y2="786" stroke="#21262d" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ─── Section label: REPORT FLOW ─── -->
+  <text x="350" y="806" text-anchor="middle" font-size="10" font-weight="700" fill="#4b5563" letter-spacing="2">③ REPORT FLOW</text>
 
   <!-- EventBridge monthly -->
-  <rect x="270" y="762" width="200" height="54" rx="9" fill="#0f1f3d" stroke="#3b82f6" stroke-width="1.8"/>
-  <text x="370" y="782" text-anchor="middle" font-size="10" fill="#93c5fd">Amazon EventBridge</text>
-  <text x="370" y="800" text-anchor="middle" font-size="13" font-weight="700" fill="#bfdbfe">cron (매월 1일)</text>
-  <text x="370" y="814" text-anchor="middle" font-size="9" fill="#60a5fa">Scheduler</text>
+  <rect x="245" y="816" width="210" height="54" rx="9" fill="#0f1f3d" stroke="#3b82f6" stroke-width="1.8"/>
+  <text x="350" y="836" text-anchor="middle" font-size="10" fill="#93c5fd">Amazon EventBridge</text>
+  <text x="350" y="854" text-anchor="middle" font-size="13" font-weight="700" fill="#bfdbfe">cron (매월 1일)</text>
+  <text x="350" y="868" text-anchor="middle" font-size="9" fill="#60a5fa">Scheduler</text>
 
-  <!-- arrow -->
-  <line x1="370" y1="816" x2="370" y2="840" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="350" y1="870" x2="350" y2="894" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Lambda report -->
-  <rect x="270" y="842" width="200" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
-  <text x="370" y="862" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
-  <text x="370" y="880" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">report</text>
-  <text x="370" y="894" text-anchor="middle" font-size="9" fill="#4ade80">업타임% · 평균응답시간 · 장애횟수</text>
+  <rect x="245" y="896" width="210" height="54" rx="9" fill="#0f2d1a" stroke="#22c55e" stroke-width="1.8"/>
+  <text x="350" y="916" text-anchor="middle" font-size="10" fill="#86efac">AWS Lambda</text>
+  <text x="350" y="934" text-anchor="middle" font-size="13" font-weight="700" fill="#bbf7d0">report</text>
+  <text x="350" y="948" text-anchor="middle" font-size="9" fill="#4ade80">업타임% · 평균응답시간 · 장애횟수</text>
 
-  <!-- arrow -->
-  <line x1="370" y1="896" x2="370" y2="920" stroke="#4b5563" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="350" y1="950" x2="350" y2="950" stroke="#6b7280" stroke-width="1.5"/>
+  <!-- horizontal arrow to S3 -->
+  <line x1="455" y1="923" x2="508" y2="923" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- S3 -->
-  <rect x="270" y="922" width="200" height="54" rx="9" fill="#0f2030" stroke="#06b6d4" stroke-width="1.8"/>
-  <text x="370" y="942" text-anchor="middle" font-size="10" fill="#67e8f9">Amazon S3</text>
-  <text x="370" y="960" text-anchor="middle" font-size="13" font-weight="700" fill="#a5f3fc">월별 리포트 (JSON)</text>
+  <rect x="510" y="898" width="144" height="62" rx="9" fill="#0f2030" stroke="#06b6d4" stroke-width="1.8"/>
+  <text x="582" y="916" text-anchor="middle" font-size="10" fill="#67e8f9">Amazon S3</text>
+  <text x="582" y="933" text-anchor="middle" font-size="12" font-weight="700" fill="#a5f3fc">월별 리포트</text>
+  <text x="582" y="949" text-anchor="middle" font-size="9" fill="#67e8f9">JSON · 보존 90일</text>
 </svg>
