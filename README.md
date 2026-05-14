@@ -5,6 +5,8 @@ EC2 없이 순수 서버리스 아키텍처로 구현한 업타임 모니터링 
 
 ## Architecture
 
+![Architecture](docs/architecture.svg)
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      API Gateway (HTTP)                  │
