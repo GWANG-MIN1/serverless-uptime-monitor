@@ -1,5 +1,6 @@
 import json
 import os
+import socket
 import time
 from datetime import datetime, timezone, timedelta
 
@@ -84,6 +85,17 @@ def do_request(url):
                 return "UP", code, None
             return "DOWN", code, f"HTTP {code}"
     except urllib.error.HTTPError as e:
-        return "DOWN", e.code, f"HTTP {e.code}"
+        return "DOWN", e.code, f"HTTP {e.code} {e.reason}"
+    except urllib.error.URLError as e:
+        reason = e.reason
+        if isinstance(reason, socket.timeout):
+            return "DOWN", None, "Connection timed out"
+        if isinstance(reason, socket.gaierror):
+            return "DOWN", None, "DNS resolution failed"
+        if isinstance(reason, OSError) and getattr(reason, "errno", None) in (16, 111):
+            return "DOWN", None, "DNS resolution failed"
+        return "DOWN", None, str(reason)
+    except TimeoutError:
+        return "DOWN", None, "Connection timed out"
     except Exception as e:
         return "DOWN", None, str(e)
