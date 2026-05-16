@@ -7,6 +7,24 @@ EC2 없이 순수 서버리스 아키텍처로 구현한 업타임 모니터링 
 
 ![Architecture](docs/architecture.svg)
 
+## Demo
+
+장애 감지 시 Slack과 이메일로 자동 알림이 발송됩니다.
+
+**Slack 알림**
+
+![Slack Alert](docs/slack-alert.png)
+
+**이메일 알림**
+
+![Email Alert](docs/email-alert.png)
+
+> **Error 필드 설명**
+> - `HTTP 500 Internal Server Error` — 서버 내부 오류
+> - `HTTP 503 Service Unavailable` — 서버 과부하/점검
+> - `Connection timed out` — 응답 시간 초과 (10s)
+> - `DNS resolution failed` — 도메인 자체가 존재하지 않음
+
 ## Tech Stack
 
 | 분류 | 기술 |
