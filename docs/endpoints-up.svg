@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" font-family="'Segoe UI', Arial, sans-serif">
+
+  <!-- Background -->
+  <rect width="680" height="400" fill="#0d1117" rx="12"/>
+  <rect x="16" y="16" width="648" height="368" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1.2"/>
+
+  <!-- Header -->
+  <text x="32" y="50" font-size="15" font-weight="700" fill="#e6edf3">Serverless Uptime Monitor</text>
+  <rect x="446" y="34" width="52" height="20" rx="10" fill="#0d2d0d" stroke="#22c55e" stroke-width="1"/>
+  <circle cx="457" cy="44" r="4" fill="#22c55e"/>
+  <text x="464" y="48" font-size="10" font-weight="700" fill="#4ade80">LIVE</text>
+  <text x="32" y="68" font-size="11" fill="#6b7280">GET https://6l5tilj8yl.execute-api.ap-northeast-2.amazonaws.com/endpoints</text>
+  <line x1="32" y1="80" x2="648" y2="80" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Stats row -->
+  <rect x="32" y="92" width="608" height="68" rx="8" fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+
+  <text x="88" y="116" text-anchor="middle" font-size="10" fill="#6b7280" letter-spacing="1">MONITORED</text>
+  <text x="88" y="140" text-anchor="middle" font-size="26" font-weight="700" fill="#e6edf3">3</text>
+
+  <line x1="200" y1="100" x2="200" y2="152" stroke="#21262d" stroke-width="1"/>
+
+  <text x="280" y="116" text-anchor="middle" font-size="10" fill="#6b7280" letter-spacing="1">ALL UP</text>
+  <text x="280" y="140" text-anchor="middle" font-size="26" font-weight="700" fill="#22c55e">3 / 3</text>
+
+  <line x1="380" y1="100" x2="380" y2="152" stroke="#21262d" stroke-width="1"/>
+
+  <text x="476" y="116" text-anchor="middle" font-size="10" fill="#6b7280" letter-spacing="1">CHECK INTERVAL</text>
+  <text x="476" y="140" text-anchor="middle" font-size="16" font-weight="700" fill="#e6edf3">Every 1 min</text>
+
+  <line x1="560" y1="100" x2="560" y2="152" stroke="#21262d" stroke-width="1"/>
+
+  <text x="608" y="116" text-anchor="middle" font-size="10" fill="#6b7280" letter-spacing="1">AVG LATENCY</text>
+  <text x="608" y="140" text-anchor="middle" font-size="16" font-weight="700" fill="#e6edf3">114 ms</text>
+
+  <!-- Section label -->
+  <text x="32" y="184" font-size="10" font-weight="700" fill="#4b5563" letter-spacing="1.5">ENDPOINTS</text>
+
+  <!-- Card 1: Google -->
+  <rect x="32" y="192" width="608" height="52" rx="8" fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+  <circle cx="58" cy="218" r="6" fill="#22c55e"/>
+  <text x="76" y="214" font-size="14" font-weight="700" fill="#e6edf3">Google</text>
+  <text x="76" y="230" font-size="11" fill="#6b7280">https://www.google.com</text>
+  <text x="590" y="212" text-anchor="end" font-size="13" font-weight="700" fill="#22c55e">UP</text>
+  <text x="590" y="228" text-anchor="end" font-size="11" fill="#6b7280">162 ms</text>
+  <text x="590" y="240" text-anchor="end" font-size="10" fill="#4b5563">checked just now</text>
+
+  <!-- Card 2: GitHub -->
+  <rect x="32" y="252" width="608" height="52" rx="8" fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+  <circle cx="58" cy="278" r="6" fill="#22c55e"/>
+  <text x="76" y="274" font-size="14" font-weight="700" fill="#e6edf3">GitHub</text>
+  <text x="76" y="290" font-size="11" fill="#6b7280">https://www.github.com</text>
+  <text x="590" y="272" text-anchor="end" font-size="13" font-weight="700" fill="#22c55e">UP</text>
+  <text x="590" y="288" text-anchor="end" font-size="11" fill="#6b7280">99 ms</text>
+  <text x="590" y="300" text-anchor="end" font-size="10" fill="#4b5563">checked just now</text>
+
+  <!-- Card 3: Naver -->
+  <rect x="32" y="312" width="608" height="52" rx="8" fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+  <circle cx="58" cy="338" r="6" fill="#22c55e"/>
+  <text x="76" y="334" font-size="14" font-weight="700" fill="#e6edf3">Naver</text>
+  <text x="76" y="350" font-size="11" fill="#6b7280">https://www.naver.com</text>
+  <text x="590" y="332" text-anchor="end" font-size="13" font-weight="700" fill="#22c55e">UP</text>
+  <text x="590" y="348" text-anchor="end" font-size="11" fill="#6b7280">82 ms</text>
+  <text x="590" y="360" text-anchor="end" font-size="10" fill="#4b5563">checked just now</text>
+
+</svg>

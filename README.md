@@ -9,13 +9,15 @@ EC2 없이 순수 서버리스 아키텍처로 구현한 업타임 모니터링 
 
 ## Demo
 
-장애 감지 시 Slack과 이메일로 자동 알림이 발송됩니다.
+**엔드포인트 모니터링 현황** — Google, GitHub, Naver를 1분 주기로 헬스체크
 
-**Slack 알림**
+![Endpoints UP](docs/endpoints-up.svg)
+
+**장애 감지 시 Slack 알림** — UP → DOWN 전환 시 즉시 발송
 
 ![Slack Alert](docs/slack-alert.png)
 
-**이메일 알림**
+**장애 감지 시 이메일 알림** — Amazon SNS를 통해 발송
 
 ![Email Alert](docs/email-alert.png)
 
