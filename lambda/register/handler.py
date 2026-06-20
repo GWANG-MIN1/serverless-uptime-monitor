@@ -2,6 +2,7 @@ import json
 import os
 import uuid
 from datetime import datetime, timezone
+from urllib.parse import urlparse
 
 import boto3
 from boto3.dynamodb.conditions import Key
@@ -9,6 +10,17 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource("dynamodb")
 endpoints_table = dynamodb.Table(os.environ["ENDPOINTS_TABLE"])
 history_table = dynamodb.Table(os.environ["HISTORY_TABLE"])
+
+# 이름이 너무 길면 잘라서 저장 (DynamoDB/알림 메시지 보호)
+MAX_NAME_LENGTH = 100
+
+
+def is_valid_url(url):
+    """http/https 스킴과 호스트가 모두 있어야 유효한 URL로 본다."""
+    if not isinstance(url, str):
+        return False
+    parsed = urlparse(url.strip())
+    return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
 
 def lambda_handler(event, context):
@@ -31,12 +43,18 @@ def lambda_handler(event, context):
 
 
 def create_endpoint(event):
-    body = json.loads(event.get("body", "{}"))
-    url = body.get("url")
-    name = body.get("name", url)
+    try:
+        body = json.loads(event.get("body") or "{}")
+    except json.JSONDecodeError:
+        return response(400, {"message": "Request body must be valid JSON"})
 
+    url = (body.get("url") or "").strip()
     if not url:
         return response(400, {"message": "url is required"})
+    if not is_valid_url(url):
+        return response(400, {"message": "url must start with http:// or https://"})
+
+    name = (body.get("name") or url).strip()[:MAX_NAME_LENGTH]
 
     endpoint_id = str(uuid.uuid4())
     item = {
@@ -64,7 +82,12 @@ def get_endpoint(endpoint_id):
 
 
 def delete_endpoint(endpoint_id):
-    endpoints_table.delete_item(Key={"id": endpoint_id})
+    result = endpoints_table.delete_item(
+        Key={"id": endpoint_id},
+        ReturnValues="ALL_OLD",
+    )
+    if not result.get("Attributes"):
+        return response(404, {"message": "Endpoint not found"})
     return response(204, {})
 
 
