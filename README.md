@@ -40,6 +40,7 @@ EC2 없이 순수 서버리스 아키텍처로 구현한 업타임 모니터링 
 | Storage | Amazon S3 |
 | IaC | Terraform |
 | CI/CD | GitHub Actions |
+| Test | pytest |
 
 ## API
 
@@ -65,6 +66,26 @@ curl https://{api-id}.execute-api.ap-northeast-2.amazonaws.com/endpoints
 # 이력 조회
 curl https://{api-id}.execute-api.ap-northeast-2.amazonaws.com/endpoints/{id}/history
 ```
+
+### 입력 검증
+
+`POST /endpoints` 는 다음 규칙으로 입력을 검증합니다.
+
+- `url` 은 필수이며 `http://` 또는 `https://` 로 시작해야 합니다. 그 외에는 `400` 을 반환합니다.
+- 잘못된 JSON 본문도 `400` 으로 처리합니다.
+- `name` 은 생략 시 `url` 로 대체되며, 최대 100자까지 저장됩니다.
+- 존재하지 않는 엔드포인트를 `DELETE` 하면 `404` 를 반환합니다.
+
+## 테스트
+
+순수 로직(URL 검증, 업타임 통계 계산)에 대한 단위 테스트를 `pytest` 로 작성했습니다.
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+테스트는 실제 AWS 에 연결하지 않으며, GitHub Actions 에서도 배포 전에 자동으로 실행됩니다.
 
 ## 배포
 
