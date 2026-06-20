@@ -50,7 +50,11 @@ def get_stats(endpoint_id, start, end):
             Key("checked_at").between(start.isoformat(), end.isoformat())
         )
     )
-    items = result.get("Items", [])
+    return compute_stats(result.get("Items", []))
+
+
+def compute_stats(items):
+    """헬스체크 이력 리스트로부터 업타임 통계를 계산하는 순수 함수."""
     if not items:
         return {"total_checks": 0, "uptime_pct": None, "avg_latency_ms": None, "incidents": 0}
 
