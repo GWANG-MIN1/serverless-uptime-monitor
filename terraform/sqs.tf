@@ -1,3 +1,18 @@
+resource "aws_sqs_queue" "check_queue" {
+  name                       = "${var.project_name}-check-queue"
+  message_retention_seconds  = 300
+  visibility_timeout_seconds = 35
+
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.check_dlq.arn
+    maxReceiveCount     = 2
+  })
+}
+
+resource "aws_sqs_queue" "check_dlq" {
+  name = "${var.project_name}-check-dlq"
+}
+
 resource "aws_sqs_queue" "alert_queue" {
   name                       = "${var.project_name}-alert-queue"
   message_retention_seconds  = 86400

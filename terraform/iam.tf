@@ -38,12 +38,12 @@ resource "aws_iam_role_policy" "lambda_policy" {
       {
         Effect   = "Allow"
         Action   = ["sqs:SendMessage"]
-        Resource = aws_sqs_queue.alert_queue.arn
+        Resource = [aws_sqs_queue.alert_queue.arn, aws_sqs_queue.check_queue.arn]
       },
       {
         Effect   = "Allow"
         Action   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"]
-        Resource = aws_sqs_queue.alert_queue.arn
+        Resource = [aws_sqs_queue.alert_queue.arn, aws_sqs_queue.check_queue.arn]
       },
       {
         Effect   = "Allow"
