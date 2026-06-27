@@ -69,8 +69,16 @@ def create_endpoint(event):
 
 
 def list_endpoints():
-    result = endpoints_table.scan()
-    return response(200, result.get("Items", []))
+    items = []
+    kwargs = {}
+    while True:
+        result = endpoints_table.scan(**kwargs)
+        items.extend(result.get("Items", []))
+        last_key = result.get("LastEvaluatedKey")
+        if not last_key:
+            break
+        kwargs["ExclusiveStartKey"] = last_key
+    return response(200, items)
 
 
 def get_endpoint(endpoint_id):
