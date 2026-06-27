@@ -7,6 +7,8 @@ resource "aws_dynamodb_table" "endpoints" {
     name = "id"
     type = "S"
   }
+
+  tags = local.common_tags
 }
 
 resource "aws_dynamodb_table" "check_history" {
@@ -29,4 +31,6 @@ resource "aws_dynamodb_table" "check_history" {
     attribute_name = "expires_at"
     enabled        = true
   }
+
+  tags = local.common_tags
 }

@@ -46,6 +46,8 @@ resource "aws_lambda_function" "register" {
   environment {
     variables = local.lambda_env
   }
+
+  tags = local.common_tags
 }
 
 resource "aws_lambda_function" "health_check" {
@@ -60,6 +62,8 @@ resource "aws_lambda_function" "health_check" {
   environment {
     variables = local.lambda_env
   }
+
+  tags = local.common_tags
 }
 
 data "archive_file" "health_check_worker" {
@@ -80,6 +84,8 @@ resource "aws_lambda_function" "health_check_worker" {
   environment {
     variables = local.lambda_env
   }
+
+  tags = local.common_tags
 }
 
 resource "aws_lambda_event_source_mapping" "sqs_to_health_check_worker" {
@@ -100,6 +106,8 @@ resource "aws_lambda_function" "alert" {
   environment {
     variables = local.lambda_env
   }
+
+  tags = local.common_tags
 }
 
 resource "aws_lambda_function" "report" {
@@ -114,6 +122,8 @@ resource "aws_lambda_function" "report" {
   environment {
     variables = local.lambda_env
   }
+
+  tags = local.common_tags
 }
 
 resource "aws_lambda_event_source_mapping" "sqs_to_alert" {
