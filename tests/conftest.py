@@ -13,7 +13,8 @@ from pathlib import Path
 os.environ.setdefault("AWS_DEFAULT_REGION", "ap-northeast-2")
 os.environ.setdefault("ENDPOINTS_TABLE", "test-endpoints")
 os.environ.setdefault("HISTORY_TABLE", "test-history")
-os.environ.setdefault("ALERT_QUEUE_URL", "https://sqs.test/queue")
+os.environ.setdefault("ALERT_QUEUE_URL", "https://sqs.test/alert-queue")
+os.environ.setdefault("CHECK_QUEUE_URL", "https://sqs.test/check-queue")
 os.environ.setdefault("SNS_TOPIC_ARN", "arn:aws:sns:test")
 os.environ.setdefault("REPORTS_BUCKET", "test-reports")
 
