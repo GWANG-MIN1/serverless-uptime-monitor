@@ -18,8 +18,15 @@ TTL_DAYS = 30
 
 
 def lambda_handler(event, context):
-    result = endpoints_table.scan()
-    endpoints = result.get("Items", [])
+    endpoints = []
+    kwargs = {}
+    while True:
+        result = endpoints_table.scan(**kwargs)
+        endpoints.extend(result.get("Items", []))
+        last_key = result.get("LastEvaluatedKey")
+        if not last_key:
+            break
+        kwargs["ExclusiveStartKey"] = last_key
 
     for endpoint in endpoints:
         check_endpoint(endpoint)
