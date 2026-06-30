@@ -2,3 +2,5 @@
 # (boto3 는 Lambda 런타임에 기본 포함되므로 로컬 테스트 시에만 필요)
 boto3>=1.34
 pytest>=8.0
+# upgrade-04: moto 통합테스트용 (docs/upgrades/04-moto-integration-tests.md)
+moto[dynamodb,sqs]>=5.0
