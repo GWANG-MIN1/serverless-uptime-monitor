@@ -57,6 +57,9 @@ def check_endpoint(endpoint):
     )
 
     # 상태가 UP에서 DOWN으로 바뀔 때만 알림
+    # TODO(upgrade-01): 복구(DOWN→UP) 알림 추가 — docs/upgrades/01-recovery-notification.md
+    #   - UP→DOWN 전환 시 endpoints 테이블에 down_since 기록
+    #   - previous_status == "DOWN" and status == "UP" 분기에서 RECOVERED 알림 + downtime 계산
     if previous_status != "DOWN" and status == "DOWN":
         sqs.send_message(
             QueueUrl=ALERT_QUEUE_URL,
