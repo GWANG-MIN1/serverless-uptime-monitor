@@ -23,6 +23,19 @@ def is_valid_url(url):
     return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
 
+def is_blocked_host(url):
+    """SSRF 방어 스텁 — 사설/루프백/링크로컬/예약 대역이면 True를 반환할 예정.
+
+    TODO(upgrade-05): docs/upgrades/05-ssrf-guard.md
+      - 호스트명 → IP 해석(socket.getaddrinfo)
+      - ipaddress 로 is_private/is_loopback/is_link_local/is_reserved 검사
+      - 169.254.169.254(IMDS) 명시 차단
+      - 구현 후 create_endpoint 검증 흐름에 연결
+    아직 미연결 스텁이므로 항상 False(차단 안 함)를 반환한다.
+    """
+    return False
+
+
 def lambda_handler(event, context):
     method = event.get("requestContext", {}).get("http", {}).get("method", "")
     path = event.get("rawPath", "")
