@@ -1,0 +1,16 @@
+# 코드 품질 도구 설정 (skeleton)
+# upgrade-03(CI 품질 게이트)에서 본격 적용 예정 — docs/upgrades/03-ci-quality-gate.md
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+# TODO(upgrade-03): 규칙셋 확정 후 CI 에서 `ruff check .` 게이트로 사용
+exclude = [
+    "**/*.zip",
+    "terraform",
+]
+
+[tool.ruff.lint]
+# 일단 보수적으로 시작 (E/F/I). 내일 확장.
+select = ["E", "F", "I"]
+ignore = []
