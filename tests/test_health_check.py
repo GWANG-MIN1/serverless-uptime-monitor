@@ -24,7 +24,9 @@ def test_dispatches_across_multiple_pages():
     page1 = {"Items": [{"id": "e1", "url": "https://a.com"}], "LastEvaluatedKey": {"id": "e1"}}
     page2 = {"Items": [{"id": "e2", "url": "https://b.com"}]}
 
-    with patch.object(health_check.endpoints_table, "scan", side_effect=[page1, page2]) as mock_scan, \
+    with patch.object(
+        health_check.endpoints_table, "scan", side_effect=[page1, page2]
+    ) as mock_scan, \
          patch.object(health_check.sqs, "send_message") as mock_send:
         result = health_check.lambda_handler({}, {})
 

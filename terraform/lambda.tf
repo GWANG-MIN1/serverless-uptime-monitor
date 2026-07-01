@@ -1,12 +1,12 @@
 locals {
   lambda_env = {
-    ENDPOINTS_TABLE    = aws_dynamodb_table.endpoints.name
-    HISTORY_TABLE      = aws_dynamodb_table.check_history.name
-    ALERT_QUEUE_URL    = aws_sqs_queue.alert_queue.url
-    CHECK_QUEUE_URL    = aws_sqs_queue.check_queue.url
-    SNS_TOPIC_ARN      = aws_sns_topic.alerts.arn
-    SLACK_WEBHOOK_URL  = var.slack_webhook_url
-    REPORTS_BUCKET     = aws_s3_bucket.reports.bucket
+    ENDPOINTS_TABLE   = aws_dynamodb_table.endpoints.name
+    HISTORY_TABLE     = aws_dynamodb_table.check_history.name
+    ALERT_QUEUE_URL   = aws_sqs_queue.alert_queue.url
+    CHECK_QUEUE_URL   = aws_sqs_queue.check_queue.url
+    SNS_TOPIC_ARN     = aws_sns_topic.alerts.arn
+    SLACK_WEBHOOK_URL = var.slack_webhook_url
+    REPORTS_BUCKET    = aws_s3_bucket.reports.bucket
   }
 }
 

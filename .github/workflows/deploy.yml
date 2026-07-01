@@ -24,8 +24,28 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
+      - name: Ruff (lint + import order)
+        run: |
+          pip install ruff
+          ruff check .
+
       - name: Run tests
         run: pytest -q
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform fmt check
+        working-directory: terraform
+        run: terraform fmt -check -recursive
+
+      - name: tfsec (IaC 보안 스캔, soft-fail)
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: terraform
+          soft_fail: true
 
   deploy:
     needs: test
