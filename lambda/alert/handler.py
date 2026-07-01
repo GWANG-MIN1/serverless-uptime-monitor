@@ -8,6 +8,9 @@ sns = boto3.client("sns")
 SNS_TOPIC_ARN = os.environ["SNS_TOPIC_ARN"]
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "")
 
+# SNS Subject 는 최대 100자 제한
+MAX_SUBJECT_LENGTH = 100
+
 
 def lambda_handler(event, context):
     for record in event.get("Records", []):
@@ -16,30 +19,80 @@ def lambda_handler(event, context):
         send_sns(body)
 
 
-def send_slack(alert):
-    if not SLACK_WEBHOOK_URL:
-        return
+def _is_recovered(alert):
+    return alert.get("event_type") == "RECOVERED"
 
+
+def build_slack_message(alert):
+    """알림 종류(DOWN/RECOVERED)에 맞는 Slack 메시지 payload 를 만든다."""
     name = alert.get("name", alert.get("url"))
     url = alert.get("url")
-    error = alert.get("error", "Unknown error")
-    detected_at = alert.get("detected_at", "")
 
-    message = {
+    if _is_recovered(alert):
+        downtime = alert.get("downtime_human") or "unknown"
+        recovered_at = alert.get("recovered_at", "")
+        return {
+            "attachments": [
+                {
+                    "color": "good",
+                    "title": f":large_green_circle: RECOVERED: {name}",
+                    "fields": [
+                        {"title": "URL", "value": url, "short": False},
+                        {"title": "Downtime", "value": downtime, "short": True},
+                        {"title": "Recovered At", "value": recovered_at, "short": True},
+                    ],
+                }
+            ]
+        }
+
+    return {
         "attachments": [
             {
                 "color": "danger",
                 "title": f":red_circle: DOWN: {name}",
                 "fields": [
                     {"title": "URL", "value": url, "short": False},
-                    {"title": "Error", "value": error, "short": True},
-                    {"title": "Detected At", "value": detected_at, "short": True},
+                    {"title": "Error", "value": alert.get("error", "Unknown error"), "short": True},
+                    {"title": "Detected At", "value": alert.get("detected_at", ""), "short": True},
                 ],
             }
         ]
     }
 
-    data = json.dumps(message).encode("utf-8")
+
+def build_sns_message(alert):
+    """알림 종류에 맞는 SNS (subject, message) 를 만든다."""
+    name = alert.get("name", alert.get("url"))
+    url = alert.get("url")
+
+    if _is_recovered(alert):
+        downtime = alert.get("downtime_human") or "unknown"
+        subject = f"[RECOVERED] {name}"[:MAX_SUBJECT_LENGTH]
+        message = (
+            f"Endpoint has RECOVERED\n\n"
+            f"Name: {name}\n"
+            f"URL: {url}\n"
+            f"Downtime: {downtime}\n"
+            f"Recovered At: {alert.get('recovered_at', '')}"
+        )
+        return subject, message
+
+    subject = f"[DOWN] {name}"[:MAX_SUBJECT_LENGTH]
+    message = (
+        f"Endpoint is DOWN\n\n"
+        f"Name: {name}\n"
+        f"URL: {url}\n"
+        f"Error: {alert.get('error', 'Unknown error')}\n"
+        f"Detected At: {alert.get('detected_at', '')}"
+    )
+    return subject, message
+
+
+def send_slack(alert):
+    if not SLACK_WEBHOOK_URL:
+        return
+
+    data = json.dumps(build_slack_message(alert)).encode("utf-8")
     req = urllib.request.Request(
         SLACK_WEBHOOK_URL,
         data=data,
@@ -53,18 +106,5 @@ def send_slack(alert):
 
 
 def send_sns(alert):
-    name = alert.get("name", alert.get("url"))
-    url = alert.get("url")
-    error = alert.get("error", "Unknown error")
-
-    sns.publish(
-        TopicArn=SNS_TOPIC_ARN,
-        Subject=f"[DOWN] {name}",
-        Message=(
-            f"Endpoint is DOWN\n\n"
-            f"Name: {name}\n"
-            f"URL: {url}\n"
-            f"Error: {error}\n"
-            f"Detected At: {alert.get('detected_at', '')}"
-        ),
-    )
+    subject, message = build_sns_message(alert)
+    sns.publish(TopicArn=SNS_TOPIC_ARN, Subject=subject, Message=message)

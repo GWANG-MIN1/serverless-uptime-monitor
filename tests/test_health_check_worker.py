@@ -136,3 +136,43 @@ def test_history_written_for_every_check():
     assert item["status"] == "UP"
     assert "checked_at" in item
     assert "expires_at" in item
+
+
+# ── 복구 지속시간 포맷 (upgrade-01) ─────────────────────────────────────────
+
+
+def test_format_duration_seconds_only():
+    assert worker.format_duration(45) == "45s"
+
+
+def test_format_duration_minutes_and_seconds():
+    assert worker.format_duration(312) == "5m 12s"
+
+
+def test_format_duration_hours():
+    assert worker.format_duration(3672) == "1h 1m 12s"
+
+
+def test_format_duration_zero_and_negative():
+    assert worker.format_duration(0) == "0s"
+    assert worker.format_duration(-10) == "0s"
+
+
+def test_format_duration_none():
+    assert worker.format_duration(None) is None
+
+
+def test_recovered_alert_sent_on_down_to_up():
+    endpoint = {"id": "e1", "url": "https://ok.com", "status": "DOWN", "name": "My Site"}
+
+    with patch.object(worker, "do_request", return_value=("UP", 200, None)), \
+         patch.object(worker.history_table, "put_item"), \
+         patch.object(worker.endpoints_table, "update_item"), \
+         patch.object(worker, "_read_down_since", return_value="2024-01-01T00:00:00+00:00"), \
+         patch.object(worker.sqs, "send_message") as mock_send:
+        worker.lambda_handler(_sqs_event(endpoint), {})
+
+    mock_send.assert_called_once()
+    body = json.loads(mock_send.call_args[1]["MessageBody"])
+    assert body["event_type"] == "RECOVERED"
+    assert body["downtime_human"] is not None

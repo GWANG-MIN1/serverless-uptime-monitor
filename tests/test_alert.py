@@ -74,3 +74,41 @@ def test_multiple_records_processed():
         alert.lambda_handler(event, {})
 
     assert mock_publish.call_count == 2
+
+
+# ── 복구(RECOVERED) 알림 (upgrade-01) ────────────────────────────────────────
+
+RECOVERED_ALERT = {
+    "event_type": "RECOVERED",
+    "endpoint_id": "e1",
+    "name": "My Site",
+    "url": "https://mysite.com",
+    "recovered_at": "2024-01-01T00:05:00+00:00",
+    "downtime_seconds": 312,
+    "downtime_human": "5m 12s",
+}
+
+
+def test_recovered_sns_subject_and_downtime():
+    subject, message = alert.build_sns_message(RECOVERED_ALERT)
+    assert "[RECOVERED]" in subject
+    assert "5m 12s" in message
+    assert "My Site" in subject
+
+
+def test_recovered_slack_uses_good_color():
+    msg = alert.build_slack_message(RECOVERED_ALERT)
+    attachment = msg["attachments"][0]
+    assert attachment["color"] == "good"
+    assert "RECOVERED" in attachment["title"]
+
+
+def test_down_slack_uses_danger_color():
+    msg = alert.build_slack_message(SAMPLE_ALERT)
+    assert msg["attachments"][0]["color"] == "danger"
+
+
+def test_long_name_subject_is_truncated_to_100():
+    long_alert = {**SAMPLE_ALERT, "name": "N" * 200}
+    subject, _ = alert.build_sns_message(long_alert)
+    assert len(subject) <= 100

@@ -2,11 +2,11 @@ import json
 import os
 import socket
 import time
-from datetime import datetime, timezone, timedelta
+import urllib.error
+import urllib.request
+from datetime import datetime, timedelta, timezone
 
 import boto3
-import urllib.request
-import urllib.error
 
 dynamodb = boto3.resource("dynamodb")
 sqs = boto3.client("sqs")
@@ -56,22 +56,74 @@ def check_endpoint(endpoint):
         },
     )
 
-    # 상태가 UP에서 DOWN으로 바뀔 때만 알림
-    # TODO(upgrade-01): 복구(DOWN→UP) 알림 추가 — docs/upgrades/01-recovery-notification.md
-    #   - UP→DOWN 전환 시 endpoints 테이블에 down_since 기록
-    #   - previous_status == "DOWN" and status == "UP" 분기에서 RECOVERED 알림 + downtime 계산
     if previous_status != "DOWN" and status == "DOWN":
-        sqs.send_message(
-            QueueUrl=ALERT_QUEUE_URL,
-            MessageBody=json.dumps({
-                "endpoint_id": endpoint_id,
-                "name": endpoint.get("name", url),
-                "url": url,
-                "status_code": status_code,
-                "error": error_msg,
-                "detected_at": now.isoformat(),
-            }),
+        # UP/UNKNOWN → DOWN: 장애 시작 시각을 기록하고 DOWN 알림 발송
+        endpoints_table.update_item(
+            Key={"id": endpoint_id},
+            UpdateExpression="SET down_since = :t",
+            ExpressionAttributeValues={":t": now.isoformat()},
         )
+        _send_alert({
+            "event_type": "DOWN",
+            "endpoint_id": endpoint_id,
+            "name": endpoint.get("name", url),
+            "url": url,
+            "status_code": status_code,
+            "error": error_msg,
+            "detected_at": now.isoformat(),
+        })
+    elif previous_status == "DOWN" and status == "UP":
+        # DOWN → UP: 복구. 장애 지속시간을 계산해 RECOVERED 알림 발송
+        down_since = _read_down_since(endpoint_id, endpoint)
+        downtime_seconds = None
+        if down_since:
+            downtime_seconds = int((now - _parse_iso(down_since)).total_seconds())
+
+        endpoints_table.update_item(
+            Key={"id": endpoint_id},
+            UpdateExpression="REMOVE down_since",
+        )
+        _send_alert({
+            "event_type": "RECOVERED",
+            "endpoint_id": endpoint_id,
+            "name": endpoint.get("name", url),
+            "url": url,
+            "recovered_at": now.isoformat(),
+            "downtime_seconds": downtime_seconds,
+            "downtime_human": format_duration(downtime_seconds),
+        })
+
+
+def _send_alert(payload):
+    sqs.send_message(QueueUrl=ALERT_QUEUE_URL, MessageBody=json.dumps(payload))
+
+
+def _read_down_since(endpoint_id, endpoint):
+    """장애 시작 시각을 구한다. SQS 메시지에 없으면 테이블에서 읽는다."""
+    if endpoint.get("down_since"):
+        return endpoint["down_since"]
+    item = endpoints_table.get_item(Key={"id": endpoint_id}).get("Item") or {}
+    return item.get("down_since")
+
+
+def _parse_iso(value):
+    return datetime.fromisoformat(value)
+
+
+def format_duration(seconds):
+    """초를 사람이 읽기 쉬운 문자열로 변환. 예: 3672 → '1h 1m 12s'."""
+    if seconds is None:
+        return None
+    seconds = max(int(seconds), 0)
+    hours, rem = divmod(seconds, 3600)
+    minutes, secs = divmod(rem, 60)
+    parts = []
+    if hours:
+        parts.append(f"{hours}h")
+    if minutes:
+        parts.append(f"{minutes}m")
+    parts.append(f"{secs}s")
+    return " ".join(parts)
 
 
 def do_request(url):
