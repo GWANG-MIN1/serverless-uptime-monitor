@@ -1,5 +1,7 @@
+import ipaddress
 import json
 import os
+import socket
 import uuid
 from datetime import datetime, timezone
 from urllib.parse import urlparse
@@ -23,17 +25,43 @@ def is_valid_url(url):
     return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
 
-def is_blocked_host(url):
-    """SSRF 방어 스텁 — 사설/루프백/링크로컬/예약 대역이면 True를 반환할 예정.
+def _ip_is_blocked(ip_str):
+    """IP 문자열이 내부/예약 대역이면 True."""
+    try:
+        ip = ipaddress.ip_address(ip_str)
+    except ValueError:
+        return False
+    return (
+        ip.is_private
+        or ip.is_loopback
+        or ip.is_link_local  # 169.254.0.0/16 (AWS IMDS 169.254.169.254 포함)
+        or ip.is_reserved
+        or ip.is_multicast
+        or ip.is_unspecified
+    )
 
-    TODO(upgrade-05): docs/upgrades/05-ssrf-guard.md
-      - 호스트명 → IP 해석(socket.getaddrinfo)
-      - ipaddress 로 is_private/is_loopback/is_link_local/is_reserved 검사
-      - 169.254.169.254(IMDS) 명시 차단
-      - 구현 후 create_endpoint 검증 흐름에 연결
-    아직 미연결 스텁이므로 항상 False(차단 안 함)를 반환한다.
+
+def is_blocked_host(url):
+    """SSRF 방어 — 호스트가 사설/루프백/링크로컬/예약 대역으로 해석되면 True.
+
+    공개 API 로 등록된 URL 을 worker 가 그대로 GET 하므로, 내부망이나
+    메타데이터 주소(169.254.169.254)로의 요청을 등록 단계에서 차단한다.
     """
-    return False
+    host = urlparse(url.strip()).hostname
+    if not host:
+        return True
+
+    # 호스트가 이미 IP 리터럴이면 바로 검사
+    if _ip_is_blocked(host):
+        return True
+
+    # 도메인이면 해석되는 모든 IP 를 검사 (하나라도 내부면 차단)
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except socket.gaierror:
+        # 해석 실패는 여기서 판단하지 않는다 (worker 가 DOWN 으로 처리)
+        return False
+    return any(_ip_is_blocked(info[4][0]) for info in infos)
 
 
 def lambda_handler(event, context):
@@ -66,6 +94,8 @@ def create_endpoint(event):
         return response(400, {"message": "url is required"})
     if not is_valid_url(url):
         return response(400, {"message": "url must start with http:// or https://"})
+    if is_blocked_host(url):
+        return response(400, {"message": "url resolves to a private or reserved address"})
 
     name = (body.get("name") or url).strip()[:MAX_NAME_LENGTH]
 
