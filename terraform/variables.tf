@@ -22,3 +22,21 @@ variable "health_check_interval_minutes" {
   type        = number
   default     = 1
 }
+
+variable "log_retention_days" {
+  description = "CloudWatch Lambda 로그 보존기간(일)"
+  type        = number
+  default     = 14
+}
+
+variable "api_throttling_burst_limit" {
+  description = "HTTP API 기본 라우트 burst 한도"
+  type        = number
+  default     = 20
+}
+
+variable "api_throttling_rate_limit" {
+  description = "HTTP API 기본 라우트 초당 요청 한도"
+  type        = number
+  default     = 10
+}
